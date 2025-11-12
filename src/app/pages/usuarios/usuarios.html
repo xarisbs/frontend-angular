@@ -1,0 +1,97 @@
+<div class="bg-white p-6 rounded-xl shadow-lg text-sm">
+
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-semibold text-gray-800 flex items-center gap-2">
+      <i class="fa-solid fa-users text-blue-600"></i>
+      Usuarios
+    </h2>
+    <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition flex items-center gap-2"
+      (click)="abrirFormularioNuevoUsuario()">
+      <i class="fa-solid fa-user-plus"></i>
+      Nuevo usuario
+    </button>
+  </div>
+
+  <!-- Tabla de usuarios -->
+  <table class="min-w-full border border-gray-200 rounded-lg overflow-hidden">
+    <thead class="bg-gray-100 text-gray-700">
+      <tr>
+        <th class="text-left px-4 py-2 border-b border-gray-300">#</th>
+        <th class="text-left px-4 py-2 border-b border-gray-300">Nombre</th>
+        <th class="text-left px-4 py-2 border-b border-gray-300">Correo</th>
+        <th class="text-left px-4 py-2 border-b border-gray-300">Rol</th>
+        <th class="text-center px-4 py-2 border-b border-gray-300">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let u of usuarios" class="hover:bg-gray-50 transition">
+        <td class="px-4 py-2 border-b border-gray-300">{{ u.id }}</td>
+        <td class="px-4 py-2 border-b border-gray-300">{{ u.userName }} </td>
+        <td class="px-4 py-2 border-b border-gray-300">{{ u.correo }}</td>
+        <td class="px-4 py-2 border-b border-gray-300">{{ getRolesNames(u.roles) }}</td>
+        <td class="text-center px-4 py-2 border-b border-gray-300 space-x-3">
+          <button class="text-blue-600 hover:underline" (click)="editarUsuario(u)">
+            <i class="fa-solid fa-pen-to-square"></i>
+          </button>
+          <button class="text-red-600 hover:underline" (click)="eliminarUsuario(u.id)">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+          <button class="text-green-600 hover:underline" (click)="abrirRoles(u)">
+            <i class="fa-solid fa-user-shield"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal de roles -->
+<div *ngIf="mostrarModalRoles" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+  <div class="bg-white rounded-xl shadow-lg p-6 w-96">
+    <h3 class="text-lg font-semibold mb-4">Roles de {{ usuarioSeleccionado.nombre }}</h3>
+
+    <div class="flex flex-col gap-2 max-h-64 overflow-auto">
+      <label *ngFor="let r of rolesDisponibles" class="flex items-center gap-2">
+        <input type="checkbox" [value]="r.id" [checked]="rolesAsignados.includes(r.id)"
+          (change)="toggleRole($event, r.id)" />
+        {{ r.name }}
+      </label>
+
+    </div>
+
+    <div class="flex justify-end gap-2 mt-4">
+      <button class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded" (click)="cerrarModalRoles()">Cancelar</button>
+      <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+        (click)="guardarRoles()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de edición/creación usuario -->
+<!-- Modal de edición/creación usuario -->
+<div *ngIf="usuarioForm" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+  <div class="bg-white rounded-xl shadow-lg p-6 w-96 max-h-[90vh] overflow-auto">
+    <h3 class="text-lg font-semibold mb-4">
+      {{ usuarioForm.id ? 'Editar Usuario' : 'Nuevo Usuario' }}
+    </h3>
+
+    <div class="flex flex-col gap-2">
+      <input type="text" [(ngModel)]="usuarioForm.userName" placeholder="Usuario" class="border p-2 rounded" />
+      <input type="text" [(ngModel)]="usuarioForm.nombres" placeholder="Nombres" class="border p-2 rounded" />
+      <input type="text" [(ngModel)]="usuarioForm.apellidos" placeholder="Apellidos" class="border p-2 rounded" />
+      <input type="text" [(ngModel)]="usuarioForm.codigoUniversitario" placeholder="Código Universitario"
+        class="border p-2 rounded" />
+      <input type="text" [(ngModel)]="usuarioForm.dni" placeholder="DNI" class="border p-2 rounded" />
+      <input type="email" [(ngModel)]="usuarioForm.correo" placeholder="Correo" class="border p-2 rounded" />
+      <input type="password" [(ngModel)]="usuarioForm.password" placeholder="Contraseña" class="border p-2 rounded" />
+    </div>
+
+    <div class="flex justify-end gap-2 mt-4">
+      <button class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded"
+        (click)="cerrarFormularioUsuario()">Cancelar</button>
+      <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+        (click)="guardarUsuarioForm()">Guardar</button>
+    </div>
+  </div>
+</div>

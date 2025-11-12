@@ -1,0 +1,105 @@
+<div class="flex h-screen bg-zinc-200">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white text-zinc-700 border-r border-gray-200 flex flex-col p-4">
+    <!-- Logo -->
+    <div class="text-center mb-6">
+      <img src="/images/logo_upeu.png" alt="Logo" class="w-52 mx-auto mb-2" />
+    </div>
+
+    <!-- Navigation -->
+    <nav class="flex-1 space-y-4 text-sm">
+      <!-- Inicio -->
+      <a routerLink="/dashboard/inicio" routerLinkActive="bg-blue-900 text-white"
+        class="flex items-center gap-3 px-3 py-2 rounded transition hover:bg-blue-100 hover:text-blue-800">
+        <i class="fa-solid fa-house"></i>
+        <span>Inicio</span>
+      </a>
+
+      <!-- Divider -->
+      <hr class="border-gray-300 my-2" />
+      <p class="uppercase text-xs text-gray-400 px-4 mb-1">Apps & Pages</p>
+
+      <!-- Administrar cuentas (Dropdown) -->
+      <div>
+        <button (click)="toggleDropdown('cuentas')"
+          class="w-full flex justify-between items-center px-3 py-2 rounded hover:bg-blue-100 hover:text-blue-800 transition"
+          [ngClass]="{ 'bg-blue-100 text-blue-800': openDropdown === 'cuentas' }">
+          <span class="flex items-center gap-3">
+            <i class="fa-solid fa-user-gear"></i>
+            <span>Administrar cuentas</span>
+          </span>
+          <i class="fa-solid fa-xs" [ngClass]="openDropdown === 'cuentas' ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+        </button>
+
+        <!-- Submenú -->
+        <div *ngIf="openDropdown === 'cuentas'" class="mt-2 space-y-1 transition-all duration-300">
+          <a routerLink="perfil" routerLinkActive="bg-blue-900 text-white"
+            class="flex items-center gap-3 px-3 py-2 rounded">
+            <i class="fa-regular fa-circle text-sm"></i>
+            <span>Perfil personal</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Seguridad -->
+      <div>
+        <button (click)="toggleDropdown('seguridad')"
+          class="w-full flex justify-between items-center px-3 py-2 rounded hover:bg-blue-100 hover:text-blue-800 transition"
+          [ngClass]="{ 'bg-blue-100 text-blue-800': openDropdown === 'seguridad' }">
+          <span class="flex items-center gap-3">
+            <i class="fa-solid fa-lock"></i>
+            <span>Seguridad</span>
+          </span>
+          <i class="fa-solid fa-xs" [ngClass]="openDropdown === 'seguridad' ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+        </button>
+
+        <!-- Submenú -->
+        <div *ngIf="openDropdown === 'seguridad'" class="mt-2 space-y-1 transition-all duration-300">
+          <a routerLink="/dashboard/roles" routerLinkActive="bg-blue-900 text-white"
+            class="flex items-center gap-3 px-3 py-2 rounded hover:text-blue-600">
+            <i class="fa-regular fa-circle text-sm"></i>
+            <span>Roles y permisos</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <hr class="border-gray-300 my-2" />
+      <p class="uppercase text-xs text-gray-400 px-4 mb-1">Forms & Tables</p>
+
+      <!-- Usuarios -->
+      <a routerLink="/dashboard/usuarios" routerLinkActive="bg-blue-900 text-white"
+        class="flex items-center gap-3 px-3 py-2 rounded hover:bg-blue-100 hover:text-blue-800 transition">
+        <i class="fa-solid fa-users"></i>
+        <span>Usuarios</span>
+      </a>
+    </nav>
+
+    <!-- Logout -->
+    <button (click)="logout()"
+      class="bg-red-500 hover:bg-red-600 text-white font-medium py-2 rounded mt-auto flex items-center justify-center gap-2">
+      <i class="fa-solid fa-right-from-bracket"></i>
+      Cerrar sesión
+    </button>
+  </aside>
+
+  <!-- Contenido principal -->
+  <div class="flex-1 flex flex-col">
+    <!-- Header -->
+    <header class="bg-white shadow px-4 py-4 flex justify-between items-center">
+      <h1 class="text-sm font-semibold text-gray-500 uppercase">Prácticas Pre Profesionales</h1>
+      <div class="flex items-center gap-2 text-gray-600">
+        <i class="fa-solid fa-user-circle fa-xl"></i>
+        <div class="flex flex-col leading-tight">
+          <span class="font-medium">{{ (user$ | async)?.nombres }} {{ (user$ | async)?.apellidos }}</span>
+          <span class="text-xs text-gray-400 capitalize">{{ (user$ | async)?.roles?.[0] }}</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Contenido dinámico -->
+    <main class="flex-1 p-4 overflow-auto">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

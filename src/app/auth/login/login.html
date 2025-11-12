@@ -1,0 +1,45 @@
+<div class="flex justify-center items-center h-screen bg-gray-100">
+  <div class="bg-white p-8 rounded-2xl shadow-lg w-96">
+    <!-- LOGO -->
+    <div class="flex justify-center mb-6">
+      <img
+        src="images/logo_upeu.png"
+        alt="Logo UPeU"
+        class="h-16 w-auto"
+      />
+    </div>
+
+    <!-- TÍTULO -->
+    <h2 class="text-xl font-semibold text-center mb-6 text-gray-700">Iniciar sesión</h2>
+
+    <!-- FORMULARIO -->
+    <form (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+      <input
+        type="text"
+        placeholder="Nombre de Usuario"
+        [(ngModel)]="userName"
+        name="userName"
+        required
+        class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-800 outline-none"
+      />
+
+      <input
+        type="password"
+        placeholder="Contraseña"
+        [(ngModel)]="password"
+        name="password"
+        required
+        class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-800 outline-none"
+      />
+
+      <button
+        type="submit"
+        class="bg-blue-700 text-white font-medium py-2 rounded-lg hover:bg-blue-800 transition-colors"
+      >
+        Ingresar
+      </button>
+
+      <p *ngIf="error" class="text-red-600 text-center">{{ error }}</p>
+    </form>
+  </div>
+</div>
