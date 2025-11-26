@@ -9,7 +9,7 @@ import { UserService } from '../../core/services/user';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './perfil.html',
-  styleUrls: ['./perfil.css']
+  styleUrls: ['./perfil.css'],
 })
 export class Perfil implements OnInit {
   usuario: any = {};
@@ -41,11 +41,11 @@ export class Perfil implements OnInit {
       next: (data) => {
         this.usuario = {
           ...data,
-          rol: data.roles?.[0]?.name?.replace('ROLE_', '') || 'Usuario'
+          rol: data.roles?.[0]?.name?.replace('ROLE_', '') || 'Usuario',
         };
         this.cdr.detectChanges();
       },
-      error: (err) => console.error('Error al obtener usuario:', err)
+      error: (err) => console.error('Error al obtener usuario:', err),
     });
   }
 
@@ -72,11 +72,18 @@ export class Perfil implements OnInit {
         console.log('Respuesta del backend al actualizar:', updatedUser);
 
         this.ngZone.run(() => {
+          const userActual = this.authService.getUser();
+
           const nuevoUser = {
+            ...userActual, // 🧠 mantenemos token y permisos
             ...updatedUser,
             roles: updatedUser.roles?.map((r: any) => r.name),
           };
-          console.log('Nuevo usuario que se guarda en AuthService:', nuevoUser);
+
+          console.log(
+            'Nuevo usuario que se guarda en AuthService (manteniendo permisos):',
+            nuevoUser
+          );
           this.authService.setUser(nuevoUser);
         });
 
@@ -84,7 +91,7 @@ export class Perfil implements OnInit {
         this.editar = false;
         this.nuevaPassword = ''; // limpia el campo de password
       },
-      error: (err) => console.error('Error al actualizar usuario:', err)
+      error: (err) => console.error('Error al actualizar usuario:', err),
     });
   }
 }

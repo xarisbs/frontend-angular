@@ -28,9 +28,28 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/login`, credentials).pipe(
       tap((res: any) => {
         if (this.isBrowser) {
+          // 🔹 Guardar token
           localStorage.setItem('token', res.token);
-          localStorage.setItem('user', JSON.stringify(res));
+
+          // 🔹 Crear objeto usuario SIN token
+          const userData = {
+            id: res.id,
+            userName: res.userName,
+            nombres: res.nombres,
+            apellidos: res.apellidos,
+            codigoUniversitario: res.codigoUniversitario,
+            correo: res.correo,
+            roles: res.roles,
+            permissions: res.permissions
+          };
+
+          // 🔹 Guardar usuario
+          localStorage.setItem('user', JSON.stringify(userData));
+
+          console.log("TOKEN:", res.token);
+          console.log("USER:", userData);
         }
+
         this.userSubject.next(res);
       })
     );

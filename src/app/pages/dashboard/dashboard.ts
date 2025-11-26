@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavigationEnd, Router, RouterModule, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../core/services/auth';
+import { MenuItem, MenuService } from '../../core/services/menu.service';
 import { filter, Observable } from 'rxjs';
 
 @Component({
@@ -13,45 +14,52 @@ import { filter, Observable } from 'rxjs';
 export class Dashboard implements OnInit {
   openDropdown: string | null = null;
   user$: Observable<any>;
+  menu: MenuItem[] = [];
 
-  // Mapa de rutas a dropdown
+  // Mapa de rutas → dropdown que se abrirá automáticamente
   private routeDropdownMap: { [key: string]: string } = {
-    '/dashboard/roles': 'seguridad',
-    '/dashboard/perfil': 'cuentas',
-    // agrega más rutas y su dropdown correspondiente si hay otros
+    '/dashboard/roles': 'Gestión de seguridad',
+    '/dashboard/usuarios': 'Gestión de seguridad',
+    '/dashboard/monitor': 'Monitoreo y registro PPP',
+    '/dashboard/register-ppp': 'Monitoreo y registro PPP',
+    '/dashboard/supervisor-ppp': 'Monitoreo y registro PPP',
+    '/dashboard/evaluation-ppp': 'Monitoreo y registro PPP',
+    '/dashboard/perfil': 'Perfil personal',
   };
 
-  constructor(private auth: AuthService, private router: Router) {
-    this.user$ = this.auth.user$; // Async pipe en template
+  constructor(private auth: AuthService, private menuService: MenuService, private router: Router) {
+    this.user$ = this.auth.user$;
 
-    // Guardar la última ruta del dashboard
+    // Detecta cambios de ruta y abre dropdown si aplica
     this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
+      .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event: any) => {
         if (event.urlAfterRedirects.startsWith('/dashboard')) {
           sessionStorage.setItem('lastDashboardPath', event.urlAfterRedirects);
-
-          // 🔹 Abrir dropdown automáticamente según ruta
           this.updateOpenDropdown(event.urlAfterRedirects);
         }
       });
+
   }
 
   ngOnInit() {
-    // Redirige al login si el usuario no existe
-    this.auth.user$.subscribe(user => {
+    // 1️⃣ Redirige al login si el usuario no está autenticado
+    this.user$.subscribe((user) => {
       if (!user) {
         this.router.navigate(['/login']);
+        return;
       }
+      // 2️⃣ Carga el menú dinámico según permisos
+      this.menu = this.menuService.getMenu();
     });
 
-    // Redirige a la última ruta si estamos exactamente en /dashboard
+    // 3️⃣ Reabre el último dropdown según la ruta guardada
     const lastPath = sessionStorage.getItem('lastDashboardPath');
     const currentPath = this.router.url;
+
     if (currentPath === '/dashboard' && lastPath) {
       this.router.navigate([lastPath]);
     } else {
-      // 🔹 Al iniciar, también abrir dropdown si la ruta coincide
       this.updateOpenDropdown(currentPath);
     }
   }
@@ -66,14 +74,12 @@ export class Dashboard implements OnInit {
   }
 
   private updateOpenDropdown(path: string) {
-    // Recorre el mapa de rutas y abre el dropdown correspondiente
     for (const route in this.routeDropdownMap) {
       if (path.startsWith(route)) {
         this.openDropdown = this.routeDropdownMap[route];
         return;
       }
     }
-    // Si no coincide ninguna ruta, cierra todos
     this.openDropdown = null;
   }
 }

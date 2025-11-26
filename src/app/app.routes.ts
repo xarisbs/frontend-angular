@@ -7,6 +7,9 @@ import { Inicio } from './pages/inicio/inicio';
 import { Roles } from './pages/roles/roles';
 import { AuthGuard } from './core/guards/auth-guard';
 import { LoginGuard } from './core/guards/login-guard';
+import { Estudiantes } from './pages/estudiantes/estudiantes';
+import { RegistrarPpp } from './pages/registrar-ppp/registrar-ppp';
+import { SolicitudesPpp } from './pages/solicitudes-ppp/solicitudes-ppp';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -21,9 +24,10 @@ export const routes: Routes = [
       { path: 'perfil', component: Perfil },
       { path: 'roles', component: Roles },
       { path: 'usuarios', component: Usuarios },
-    ]
+      { path: 'asignar_supervisor', component: Estudiantes },
+      { path: 'register-ppp', component: SolicitudesPpp },
+      { path: 'formulario-ppp', component: RegistrarPpp },
+    ],
   },
   { path: '**', redirectTo: 'login' },
 ];
-
-

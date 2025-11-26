@@ -1,0 +1,111 @@
+<div class="bg-white p-6 rounded-xl shadow-lg text-sm">
+
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-semibold text-gray-800 flex items-center gap-2">
+      <i class="fa-solid fa-users text-blue-600"></i>
+      Estudiantes
+    </h2>
+    <div></div>
+  </div>
+
+  <!-- Tabla de usuarios -->
+  <table class="min-w-full border border-gray-200 rounded-lg overflow-hidden">
+    <thead class="bg-gray-100 text-gray-700">
+      <tr>
+        <th class="text-left px-4 py-2 border-b border-gray-300">Usuario</th>
+        <th class="text-left px-4 py-2 border-b border-gray-300">Empresa</th>
+        <th class="text-left px-4 py-2 border-b border-gray-300">Correo</th>
+        <th class="text-left px-4 py-2 border-b border-gray-300">Supervisor</th>
+        <th class="text-left px-4 py-2 border-b border-gray-300">Actualizado</th>
+        <th class="text-center px-4 py-2 border-b border-gray-300">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let u of usuarios" class="hover:bg-gray-50 transition">
+        <td class="px-4 py-2 border-b border-gray-300">{{ u.authUser.nombres }} {{ u.authUser.apellidos }} </td>
+        <td class="px-4 py-2 border-b border-gray-300">{{ u.company.razonSocial }}</td>
+        <td class="px-4 py-2 border-b border-gray-300">{{ u.authUser.correo }}</td>
+        <td class="px-4 py-2 border-b border-gray-300">{{ u.supervisor?.nombres }} {{ u.supervisor?.apellidos }}</td>
+        <td class="px-4 py-2 border-b border-gray-300">{{ u.codigoUniversitario }}</td>
+        <td class="text-center px-4 py-2 border-b border-gray-300 space-x-3">
+          <button class="text-indigo-600 hover:underline" (click)="abrirAsignacionSupervisor(u, u.id)">
+            <i class="fa-solid fa-user-tie"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- Modal: Asignar Supervisor -->
+<!-- Modal: Asignar Supervisor -->
+<div *ngIf="mostrarModalSupervisor" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+  <div class="bg-white rounded-xl shadow-lg p-6 w-96">
+
+    <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+      <i class="fa-solid fa-user-tie text-indigo-600"></i>
+      Asignar supervisor al estudiante
+    </h3>
+
+    <div class="text-center mb-4">
+      <span class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-lg font-semibold">
+        {{ usuarioSeleccionado?.nombres }} {{ usuarioSeleccionado?.apellidos }}
+      </span>
+    </div>
+
+    <p class="font-semibold mb-2">Lista de supervisores:</p>
+
+    <div class="flex flex-col gap-2 max-h-64 overflow-auto">
+      <label *ngFor="let s of supervisores" class="flex items-center gap-2">
+        <input type="radio" name="supervisor" [value]="s.id" [(ngModel)]="supervisorSeleccionado">
+        {{ s.nombres }} {{ s.apellidos }}
+      </label>
+
+      <!-- opción para quitar supervisor -->
+      <label class="flex items-center gap-2 text-red-600">
+        <input type="radio" name="supervisor" [value]="null" (change)="supervisorSeleccionado = null">
+        Quitar supervisor
+      </label>
+    </div>
+
+    <div class="flex justify-end gap-2 mt-4">
+      <button class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded"
+        (click)="cerrarModalSupervisor()">Cancelar</button>
+      <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+        (click)="guardarSupervisor()">Actualizar</button>
+    </div>
+
+  </div>
+</div>
+
+
+
+<!-- Modal de edición/creación usuario -->
+<!-- Modal de edición/creación usuario -->
+<div *ngIf="usuarioForm" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+  <div class="bg-white rounded-xl shadow-lg p-6 w-96 max-h-[90vh] overflow-auto">
+    <h3 class="text-lg font-semibold mb-4">
+      {{ usuarioForm.id ? 'Editar Usuario' : 'Nuevo Usuario' }}
+    </h3>
+
+    <div class="flex flex-col gap-2">
+      <input type="text" [(ngModel)]="usuarioForm.userName" placeholder="Usuario" class="border p-2 rounded" />
+      <input type="text" [(ngModel)]="usuarioForm.nombres" placeholder="Nombres" class="border p-2 rounded" />
+      <input type="text" [(ngModel)]="usuarioForm.apellidos" placeholder="Apellidos" class="border p-2 rounded" />
+      <input type="text" [(ngModel)]="usuarioForm.codigoUniversitario" placeholder="Código Universitario"
+        class="border p-2 rounded" />
+      <input type="text" [(ngModel)]="usuarioForm.dni" placeholder="DNI" class="border p-2 rounded" />
+      <input type="email" [(ngModel)]="usuarioForm.correo" placeholder="Correo" class="border p-2 rounded" />
+      <input type="password" [(ngModel)]="usuarioForm.password" placeholder="Contraseña" class="border p-2 rounded" />
+    </div>
+
+    <div class="flex justify-end gap-2 mt-4">
+      <button class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded"
+        (click)="cerrarFormularioUsuario()">Cancelar</button>
+      <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+        (click)="guardarUsuarioForm()">Guardar</button>
+    </div>
+  </div>
+</div>

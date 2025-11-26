@@ -1,0 +1,96 @@
+<div class="mb-4 text-xs text-zinc-600">
+  <i class="fa-solid fa-house-chimney"></i> / Tabla / <b>Registrar PPP</b>
+</div>
+
+<div class="p-4 bg-white rounded-lg shadow-lg flex flex-col justify-center">
+
+  <!-- PASO 1 -->
+  <div *ngIf="paso === 1" class="space-y-4 w-max mx-auto flex flex-col items-center">
+    <div class=" font-semibold bg-black text-white px-8 py-3 w-max">Ingrese el código del estudiante</div>
+
+    <input class="border rounded p-2 w-64 mt-4" placeholder="Código" [(ngModel)]="codigoEstudiante">
+
+    <button class="bg-zinc-600 text-white px-4 py-2 rounded w-64" (click)="buscarEstudiante()">
+      Buscar
+    </button>
+  </div>
+
+  <!-- PASO 2 -->
+  <div *ngIf="paso === 2" class="space-y-6">
+
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <h2 class="text-sm font-semibold text-center bg-zinc-800 text-white py-6 mb-4">Datos del Estudiante</h2>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label for="" class="text-xs">Nombres:</label>
+            <input class="border p-2 w-full rounded border-zinc-400" [value]="estudiante.nombres" disabled>
+          </div>
+          <div>
+            <label for="" class="text-xs">Apellidos:</label>
+            <input class="border p-2 w-full rounded border-zinc-400" [value]="estudiante.apellidos" disabled>
+          </div>
+
+          <div>
+            <label for="" class="text-xs">Dni:</label>
+            <input class="border p-2 w-full rounded border-zinc-400" [value]="estudiante.dni" disabled>
+          </div>
+
+          <div>
+            <label for="" class="text-xs">Ciclo:</label>
+            <input class="border p-2 w-full rounded border-zinc-400" [value]="estudiante.ciclo" disabled>
+          </div>
+
+        </div>
+      </div>
+
+      <div>
+        <h2 class="text-sm font-semibold text-center bg-zinc-800 text-white py-6 mb-4">Datos de la Empresa</h2>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label for="" class="text-xs">Razón social:</label>
+            <input class="border p-2 w-full rounded border-zinc-400" [(ngModel)]="empresa.razonSocial">
+          </div>
+          <div>
+            <label for="" class="text-xs">RUC:</label>
+            <input class="border p-2 w-full rounded border-zinc-400" [(ngModel)]="empresa.ruc">
+          </div>
+
+          <div>
+            <label for="" class="text-xs">Dirección Fiscal:</label>
+            <input class="border p-2 w-full rounded border-zinc-400" [(ngModel)]="empresa.direccionFiscal">
+          </div>
+
+          <div>
+            <label for="" class="text-xs">Responsable:</label>
+            <input class="border p-2 w-full rounded border-zinc-400" [(ngModel)]="empresa.responsable">
+          </div>
+
+        </div>
+
+
+      </div>
+    </div>
+
+    <div class="flex justify-between mt-4">
+      <button class="bg-gray-300 px-4 py-2 rounded" (click)="anterior()">Anterior</button>
+      <button class="bg-blue-600 text-white px-4 py-2 rounded" (click)="generarVistaPrevia()">Siguiente</button>
+    </div>
+  </div>
+
+  <!-- PASO 3 -->
+  <div *ngIf="paso === 3">
+    <h2 class="text-xl font-semibold mb-4">Vista Previa del Registro</h2>
+
+    <iframe src="docs/solicitud.pdf" class="w-full h-96 border rounded">
+    </iframe>
+
+    <div class="flex justify-between mt-4">
+      <button class="bg-gray-300 px-4 py-2 rounded" (click)="anterior()">Anterior</button>
+      <button class="bg-green-600 text-white px-4 py-2 rounded" (click)="guardar()">Guardar</button>
+    </div>
+  </div>
+
+</div>

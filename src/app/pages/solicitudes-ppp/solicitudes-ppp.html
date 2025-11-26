@@ -1,0 +1,90 @@
+<div class="mb-4 text-xs text-zinc-600">
+  <i class="fa-solid fa-house-chimney"></i> / Tabla / <b>Registros de PPP</b>
+</div>
+
+<div class="bg-white p-4 rounded-xl shadow-lg text-sm">
+
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-semibold text-gray-800 flex items-center gap-2">
+      <i class="fa-solid fa-file-lines text-blue-600"></i>
+      Registros de PPP
+    </h2>
+
+    <button type="button"
+      class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition flex items-center gap-2"
+      (click)="nuevoRegistro()">
+      <i class="fa-solid fa-plus"></i>
+      Nuevo Registro
+    </button>
+  </div>
+
+  <!-- Tabla -->
+  <table class="min-w-full border border-gray-200 rounded-lg overflow-hidden">
+    <thead class="bg-gray-100 text-gray-700">
+      <tr>
+        <th class="text-left px-4 py-2 border-b border-gray-300">Código</th>
+        <th class="text-left px-4 py-2 border-b border-gray-300">Estudiante</th>
+        <th class="text-left px-4 py-2 border-b border-gray-300">Empresa</th>
+        <th class="text-left px-4 py-2 border-b border-gray-300">Descripción</th>
+        <th class="text-left px-4 py-2 border-b border-gray-300">Línea</th>
+        <th class="text-left px-4 py-2 border-b border-gray-300">Estado</th>
+        <th class="text-left px-4 py-2 border-b border-gray-300">Fecha</th>
+        <th class="text-center px-4 py-2 border-b border-gray-300">Opciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let r of registros" class="hover:bg-gray-50 transition">
+        <td class="px-4 py-2 border-b border-gray-300">{{ r.expediente }}</td>
+        <td class="px-4 py-2 border-b border-gray-300">{{ r.estudiante }}</td>
+        <td class="px-4 py-2 border-b border-gray-300">{{ r.empresa }}</td>
+        <td class="px-4 py-2 border-b border-gray-300">{{ r.descripcion }}</td>
+        <td class="px-4 py-2 border-b border-gray-300">{{ r.linea }}</td>
+        <td class="px-4 py-2 border-b border-gray-300">{{ r.estado }}</td>
+        <td class="px-4 py-2 border-b border-gray-300">{{ r.createdAt }}</td>
+
+        <td class="text-center px-4 py-2 border-b border-gray-300 space-x-3">
+          <button *ngIf="!isEstudiante" type="button" class="text-yellow-600 hover:text-yellow-800"
+            (click)="abrirModalEstado(r)">
+            <i class="fa-solid fa-pen-to-square"></i>
+          </button>
+
+          <button type="button" class="text-red-600 hover:underline" (click)="eliminarRegistro(r)">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="mostrarModalEstado"
+    class="fixed inset-0 bg-black/40 backdrop-blur-sm flex justify-center items-center z-50">
+
+    <div class="bg-white rounded-xl shadow-xl p-6 w-96 animate-fadeIn">
+
+      <h2 class="text-lg font-semibold mb-3 text-gray-800">
+        Cambiar estado del registro
+      </h2>
+
+      <p class="text-sm text-gray-600 mb-4">
+        ¿Deseas cambiar el estado del expediente
+        <b>{{ registroSeleccionado?.expediente }}</b>?
+      </p>
+
+      <div class="flex justify-end gap-3">
+        <button type="button" (click)="cerrarModalEstado()"
+          class="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-700">
+          Cancelar
+        </button>
+
+        <button type="button" (click)="confirmarCambioEstado()"
+          class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white">
+          Confirmar
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

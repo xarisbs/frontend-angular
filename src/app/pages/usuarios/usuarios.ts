@@ -30,7 +30,7 @@ export class Usuarios implements OnInit {
   }
 
   cargarUsuarios() {
-    this.userService.getUsuarios().subscribe({
+    this.userService.getUsers().subscribe({
       next: (data) => {
         this.ngZone.run(() => {
           this.usuarios = data;
